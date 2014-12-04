@@ -27,6 +27,21 @@ namespace Ex2
         private int[,] m_board;
         private int m_dimension;
 
+        public bool IsGameOver() 
+        {
+            bool isGameOver = false;
+
+            // Check vertical
+
+            // Check horizontal
+
+            // Check diagonal left to right
+
+            // Check diagonal right to left
+
+            return isGameOver;
+        }
+
         public GameWorld(int i_dimension)
         {
             m_dimension = i_dimension;
