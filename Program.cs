@@ -19,10 +19,20 @@ namespace Ex2
 
             GameWorld world = new GameWorld(3);
             world.SetCell(1, 1, CellValues.PLAYER_1);
-        //    world.SetCell(1, 2, CellValues.PLAYER_1);
-        //    world.SetCell(1, 3, CellValues.PLAYER_1);
-            world.SetCell(2, 1, CellValues.PLAYER_1);
+     
+            // Horizontal
+            /*  
+          world.SetCell(1, 2, CellValues.PLAYER_1);
+            world.SetCell(1, 3, CellValues.PLAYER_1);
+         * /
+            // Vertical
+        /*    world.SetCell(2, 1, CellValues.PLAYER_1);
             world.SetCell(3, 1, CellValues.PLAYER_1);
+         */
+
+            // Diagonal
+            world.SetCell(2, 2, CellValues.PLAYER_1);
+            world.SetCell(3, 3, CellValues.PLAYER_1);
 
             world.Print();
             System.Console.WriteLine("Is game over? " + world.IsGameOver());
@@ -54,31 +64,47 @@ namespace Ex2
 
         public bool IsGameOver() 
         {
-            bool isGameOver = false;
-
+            
             // Check vertical
-            for (int i = 0; i < m_dimension; i++)
+            // Check horizontal
+            // Check diagonal left to right
+            // Check diagonal right to left
+            return isRowFull() || isColumnFull() || isDiagonalFull() || isReverseDiagonalFull();
+        }
+
+        private bool isReverseDiagonalFull()
+        {
+            bool isGameOver = false;
+            for (int i = 0; i < m_dimension - 1; i++)
             {
-                bool fullRow = true;
-                for (int j = 0; j < m_dimension - 1; j++)
+                bool fullDiagonal = true;
+                CellValues currentCell = m_board[i, i];
+                CellValues nextCell = m_board[i + 1, i + 1];
+
+                if (CellValues.EMPTY.Equals(currentCell) || !nextCell.Equals(currentCell))
                 {
-                   
-                    CellValues currentCell = m_board[i, j];
-                    CellValues nextCell =  m_board[i, j + 1];
-                    if (CellValues.EMPTY.Equals(currentCell)  || !nextCell.Equals(currentCell))
-                    {
-                        fullRow = false;
-                        break;
-                    }
-                    
+                    fullDiagonal = false;
+                    break;
                 }
-                if (fullRow)
+                if (fullDiagonal)
                 {
-                    return true;
+                    isGameOver = true;
+                    break;
                 }
             }
+            return isGameOver;
+        }
 
-            // Check horizontal
+        private bool isDiagonalFull()
+        {
+            return false;
+        }
+
+
+
+        private bool isColumnFull()
+        {
+            bool isGameOver = false;
             for (int i = 0; i < m_dimension; i++)
             {
                 bool fullColumn = true;
@@ -96,15 +122,38 @@ namespace Ex2
                 }
                 if (fullColumn)
                 {
-                    return true;
+                    isGameOver = true;
+                    break;
                 }
             }
+            return isGameOver;
+        }
 
-                // Check diagonal left to right
+        private bool isRowFull()
+        {
+            bool isGameOver = false;
+            for (int i = 0; i < m_dimension; i++)
+            {
+                bool fullRow = true;
+                for (int j = 0; j < m_dimension - 1; j++)
+                {
 
-                // Check diagonal right to left
+                    CellValues currentCell = m_board[i, j];
+                    CellValues nextCell = m_board[i, j + 1];
+                    if (CellValues.EMPTY.Equals(currentCell) || !nextCell.Equals(currentCell))
+                    {
+                        fullRow = false;
+                        break;
+                    }
 
-                return isGameOver;
+                }
+                if (fullRow)
+                {
+                    isGameOver = true;
+                    break;
+                }
+            }
+            return isGameOver;
         }
 
         public GameWorld(int i_dimension)
