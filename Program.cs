@@ -84,13 +84,13 @@ namespace Ex2
                 sb.Append("|");
                 switch (worldRef.Board[i_LineIndex, i])
                 {
-                    case GameWorld.CellValues.EMPTY:
+                    case CellValues.EMPTY:
                         sb.Append(" ");
                         break;
-                    case GameWorld.CellValues.PLAYER_1:
+                    case CellValues.PLAYER_1:
                         sb.Append("X");
                         break;
-                    case GameWorld.CellValues.PLAYER_2:
+                    case CellValues.PLAYER_2:
                         sb.Append("O");
                         break;
                 }
@@ -269,6 +269,11 @@ namespace Ex2
             }
         }
 
+        public CellValues GetCell(int i, int j)
+        {
+            return m_board[i - 1, j - 1];
+        }
+
         
     }
 
@@ -286,11 +291,4 @@ namespace Ex2
         COMPUTER
     }
 
-        public enum CellValues
-        {
-            EMPTY,
-            PLAYER_1,
-            PLAYER_2
-        }
-}
 }

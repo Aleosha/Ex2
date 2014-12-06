@@ -13,7 +13,7 @@ namespace Ex2
         {
             int[] bestOption = new int[2] { 1, 1 };
             float bestOptionWeight = 0;
-            int dimensions = world.GetDimensions();
+            int dimensions = world.BoardDimension;
             int[][] options = new int[dimensions*dimensions][];
 
             int optionsCount = 0;
@@ -48,7 +48,7 @@ namespace Ex2
             
             int row = p[ROW_INDEX];
             int column = p[COLUMN_INDEX];
-            int dimensions = world.GetDimensions();
+            int dimensions = world.BoardDimension;
             bool isOnDiagonal = (row == column) || (row+column==dimensions+1);
 
             for (int i = 1; i <= dimensions; i++)
