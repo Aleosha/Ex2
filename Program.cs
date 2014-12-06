@@ -44,6 +44,8 @@ namespace Ex2
 
             world.Print();
             System.Console.WriteLine("Is game over? " + world.IsGameOver());
+          
+            System.Console.WriteLine("Best option for computer is " + ComputerPlayerLogic.printBestOption(world));
             System.Console.WriteLine("Done");
         }
     }
