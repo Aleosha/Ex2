@@ -20,13 +20,16 @@ namespace Ex2
             GameConsole myConsole = new GameConsole(world);
             myConsole.Print();
             //world.SetCell(1, 1, CellValues.PLAYER_1);
-
+     
+     
             // Horizontal
             /*  
+             * world.SetCell(1, 1, CellValues.PLAYER_1);
           world.SetCell(1, 2, CellValues.PLAYER_1);
             world.SetCell(1, 3, CellValues.PLAYER_1);
          * /
             // Vertical
+             * world.SetCell(1, 1, CellValues.PLAYER_1);
         /*    world.SetCell(2, 1, CellValues.PLAYER_1);
             world.SetCell(3, 1, CellValues.PLAYER_1);
          */
@@ -150,9 +153,9 @@ namespace Ex2
             return true;
         }
 
-        public bool IsGameOver()
+        public bool IsGameOver() 
         {
-
+            
             // Check vertical
             // Check horizontal
             // Check diagonal left to right
@@ -162,10 +165,28 @@ namespace Ex2
 
         private bool isReverseDiagonalFull()
         {
-            bool isGameOver = false;
+
+            bool fullDiagonal = true;
             for (int i = 0; i < m_dimension - 1; i++)
             {
-                bool fullDiagonal = true;
+                CellValues currentCell = m_board[i, m_dimension - i - 1];
+                CellValues nextCell = m_board[i + 1, m_dimension - i - 2];
+
+                if (CellValues.EMPTY.Equals(currentCell) || !nextCell.Equals(currentCell))
+                {
+                    fullDiagonal = false;
+                    break;
+                }
+            }
+
+            return fullDiagonal;
+        }
+
+        private bool isDiagonalFull()
+        {
+            bool fullDiagonal = true;
+            for (int i = 0; i < m_dimension - 1; i++)
+            {
                 CellValues currentCell = m_board[i, i];
                 CellValues nextCell = m_board[i + 1, i + 1];
 
@@ -174,18 +195,9 @@ namespace Ex2
                     fullDiagonal = false;
                     break;
                 }
-                if (fullDiagonal)
-                {
-                    isGameOver = true;
-                    break;
-                }
+ 
             }
-            return isGameOver;
-        }
-
-        private bool isDiagonalFull()
-        {
-            return false;
+            return fullDiagonal;
         }
 
 
@@ -257,20 +269,22 @@ namespace Ex2
             }
         }
 
+        
+    }
 
-        class Player
+    class Player
+    {
+        public Player(PlayerType i_playerType, string i_name)
         {
-            public Player(PlayerType i_playerType, string i_name)
-            {
 
-            }
         }
+    }
 
-        enum PlayerType
-        {
-            HUMAN,
-            COMPUTER
-        }
+    enum PlayerType
+    {
+        HUMAN,
+        COMPUTER
+    }
 
         public enum CellValues
         {
@@ -278,5 +292,5 @@ namespace Ex2
             PLAYER_1,
             PLAYER_2
         }
-    }
+}
 }
