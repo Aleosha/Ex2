@@ -21,7 +21,7 @@ namespace Ex2
             {
                 for (int j = 1; j <= dimensions; j++)
                 {
-                    if (CellValues.EMPTY.Equals(world.GetCell(i, j)))
+                    if (CellValue.EMPTY.Equals(world.GetCell(i, j)))
                     {
                         options[optionsCount] = new int[] { i, j};
                         optionsCount++;
@@ -57,10 +57,10 @@ namespace Ex2
                 {
                     switch (world.GetCell(row, i)) 
                     {
-                        case CellValues.EMPTY:
+                        case CellValue.EMPTY:
                             weight++;
                             break;
-                        case CellValues.PLAYER_2:
+                        case CellValue.PLAYER_2:
                             weight--;
                             break;            
                     }
@@ -74,10 +74,10 @@ namespace Ex2
                 {
                     switch (world.GetCell(i, column))
                     {
-                        case CellValues.EMPTY:
+                        case CellValue.EMPTY:
                             weight++;
                             break;
-                        case CellValues.PLAYER_2:
+                        case CellValue.PLAYER_2:
                             weight--;
                             break;
                     }
