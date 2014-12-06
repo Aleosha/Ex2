@@ -8,6 +8,8 @@ namespace Ex2
 {
     class Program
     {
+
+
         static void Main(string[] args)
         {
             // Please enter board size (3-9)
@@ -15,8 +17,15 @@ namespace Ex2
             // Do you want to play agains another player or against computer
 
 
-            GameWorld world = new GameWorld(5);
+            GameWorld world = new GameWorld(3);
+            world.SetCell(1, 1, CellValues.PLAYER_1);
+        //    world.SetCell(1, 2, CellValues.PLAYER_1);
+        //    world.SetCell(1, 3, CellValues.PLAYER_1);
+            world.SetCell(2, 1, CellValues.PLAYER_1);
+            world.SetCell(3, 1, CellValues.PLAYER_1);
+
             world.Print();
+            System.Console.WriteLine("Is game over? " + world.IsGameOver());
             System.Console.WriteLine("Done");
         }
     }
@@ -24,31 +33,91 @@ namespace Ex2
     class GameWorld
     {
 
-        private int[,] m_board;
+        private CellValues[,] m_board;
         private int m_dimension;
+
+
+        public bool SetCell(int row, int column, CellValues value)
+        {
+            if (CellValues.EMPTY.Equals(value))
+            {
+                return false;
+            }
+            else if (!CellValues.EMPTY.Equals(m_board[row - 1, column - 1]))
+            {
+                return false;
+            }
+            m_board[row - 1, column - 1] = value;
+
+            return true;
+        }
 
         public bool IsGameOver() 
         {
             bool isGameOver = false;
 
             // Check vertical
+            for (int i = 0; i < m_dimension; i++)
+            {
+                bool fullRow = true;
+                for (int j = 0; j < m_dimension - 1; j++)
+                {
+                   
+                    CellValues currentCell = m_board[i, j];
+                    CellValues nextCell =  m_board[i, j + 1];
+                    if (CellValues.EMPTY.Equals(currentCell)  || !nextCell.Equals(currentCell))
+                    {
+                        fullRow = false;
+                        break;
+                    }
+                    
+                }
+                if (fullRow)
+                {
+                    return true;
+                }
+            }
 
             // Check horizontal
+            for (int i = 0; i < m_dimension; i++)
+            {
+                bool fullColumn = true;
+                for (int j = 0; j < m_dimension - 1; j++)
+                {
 
-            // Check diagonal left to right
+                    CellValues currentCell = m_board[j, i];
+                    CellValues nextCell = m_board[j + 1, i];
+                    if (CellValues.EMPTY.Equals(currentCell) || !nextCell.Equals(currentCell))
+                    {
+                        fullColumn = false;
+                        break;
+                    }
 
-            // Check diagonal right to left
+                }
+                if (fullColumn)
+                {
+                    return true;
+                }
+            }
 
-            return isGameOver;
+                // Check diagonal left to right
+
+                // Check diagonal right to left
+
+                return isGameOver;
         }
 
         public GameWorld(int i_dimension)
         {
             m_dimension = i_dimension;
-            m_board = new int[i_dimension, i_dimension];
-            m_board[2 - 1, 1 - 1] = 1;
-
-            m_board[3 - 1, 3 - 1] = 2;
+            m_board = new CellValues[i_dimension, i_dimension];
+            for (int i = 0; i < m_dimension; i++)
+            {
+                for (int j = 0; j < m_dimension; j++)
+                {
+                    m_board[i, j] = CellValues.EMPTY;
+                }
+            }
         }
 
         public void Print()
@@ -79,29 +148,25 @@ namespace Ex2
             sb.Append(i_lineIndex + 1);
             for (int i = 0; i < m_dimension; i++)
             {
-                sb.Append("|").Append(getCellValue(i_lineIndex, i));
+                sb.Append("|");
+                switch(m_board[i_lineIndex, i])
+                {
+                    case CellValues.EMPTY:
+                        sb.Append(" ");
+                        break;
+                    case CellValues.PLAYER_1:
+                        sb.Append("X");
+                        break;
+                    case CellValues.PLAYER_2:
+                        sb.Append("O");
+                        break;
+                }
             }
 
             return sb.ToString();
 
         }
 
-        private string getCellValue(int i_lineIndex, int i_columnIndex)
-        {
-            string value = " ";
-            int cellContent = m_board[i_lineIndex, i_columnIndex];
-            switch (cellContent) 
-            {
-                 case 1:
-                    value = "X";
-                    break;
-                case 2:
-                    value = "O";
-                    break;
-            }
-
-            return value;
-        }
 
         private string getHorizontalIndexes() 
         {
@@ -133,5 +198,12 @@ namespace Ex2
     {
         HUMAN,
         COMPUTER
+    }
+
+    enum CellValues
+    {
+        EMPTY,
+        PLAYER_1,
+        PLAYER_2
     }
 }
