@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Ex2
 {
@@ -18,8 +17,10 @@ namespace Ex2
 
 
             GameWorld world = new GameWorld(3);
-            world.SetCell(1, 1, CellValues.PLAYER_1);
-     
+            GameConsole myConsole = new GameConsole(world);
+            myConsole.Print();
+            //world.SetCell(1, 1, CellValues.PLAYER_1);
+
             // Horizontal
             /*  
           world.SetCell(1, 2, CellValues.PLAYER_1);
@@ -31,21 +32,108 @@ namespace Ex2
          */
 
             // Diagonal
-            world.SetCell(2, 2, CellValues.PLAYER_1);
-            world.SetCell(3, 3, CellValues.PLAYER_1);
+            //world.SetCell(2, 2, CellValues.PLAYER_1);
+            //world.SetCell(3, 3, CellValues.PLAYER_1);
 
-            world.Print();
-            System.Console.WriteLine("Is game over? " + world.IsGameOver());
-            System.Console.WriteLine("Done");
+            //world.Print();
+            //System.Console.WriteLine("Is game over? " + world.IsGameOver());
+            //System.Console.WriteLine("Done");
         }
     }
 
-    class GameWorld
+    public class GameConsole
+    {
+        private GameWorld worldRef;
+
+        public GameConsole(GameWorld gameWorld)
+        {
+            worldRef = gameWorld;
+        }
+
+        public void Print()
+        {
+            write(getHorizontalIndexes());
+
+            for (int i = 0; i < worldRef.BoardDimension; i++)
+            {
+                write(getLine(i));
+                write(getSeparatorLine());
+            }
+        }
+
+        private string getSeparatorLine()
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < worldRef.BoardDimension * 2 + 2; i++)
+            {
+                sb.Append("=");
+            }
+            return sb.ToString();
+        }
+
+        private string getLine(int i_LineIndex)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append(i_LineIndex + 1);
+            for (int i = 0; i < worldRef.BoardDimension; i++)
+            {
+                sb.Append("|");
+                switch (worldRef.Board[i_LineIndex, i])
+                {
+                    case GameWorld.CellValues.EMPTY:
+                        sb.Append(" ");
+                        break;
+                    case GameWorld.CellValues.PLAYER_1:
+                        sb.Append("X");
+                        break;
+                    case GameWorld.CellValues.PLAYER_2:
+                        sb.Append("O");
+                        break;
+                }
+            }
+            sb.Append("|");
+
+            return sb.ToString();
+
+        }
+
+
+        private string getHorizontalIndexes()
+        {
+            StringBuilder sb = new StringBuilder(" ");
+
+            for (int i = 1; i <= worldRef.BoardDimension; i++)
+            {
+                sb.Append(" ").Append(i);
+            }
+
+
+            return sb.ToString();
+        }
+
+        private void write(string i_stringToWrite)
+        {
+            System.Console.WriteLine(i_stringToWrite);
+        }
+    }
+
+    public class GameWorld
     {
 
         private CellValues[,] m_board;
         private int m_dimension;
+        private CellValues cellValuesEnum;
 
+        public CellValues[,] Board
+        {
+            get { return m_board; }
+        }
+
+        public int BoardDimension
+        {
+            get { return m_dimension; }
+        }
 
         public bool SetCell(int row, int column, CellValues value)
         {
@@ -62,9 +150,9 @@ namespace Ex2
             return true;
         }
 
-        public bool IsGameOver() 
+        public bool IsGameOver()
         {
-            
+
             // Check vertical
             // Check horizontal
             // Check diagonal left to right
@@ -169,90 +257,26 @@ namespace Ex2
             }
         }
 
-        public void Print()
-        {
-            write(getHorizontalIndexes());
 
-            for (int i = 0; i < m_dimension; i++)
+        class Player
+        {
+            public Player(PlayerType i_playerType, string i_name)
             {
-                write(getLine(i));
-                write(getSeparatorLine());
+
             }
         }
 
-        private string getSeparatorLine()
+        enum PlayerType
         {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < m_dimension*2+1; i++)
-            {
-                sb.Append("=");
-            }
-            return sb.ToString();
+            HUMAN,
+            COMPUTER
         }
 
-        private string getLine(int i_lineIndex)
+        public enum CellValues
         {
-            StringBuilder sb = new StringBuilder();
-
-            sb.Append(i_lineIndex + 1);
-            for (int i = 0; i < m_dimension; i++)
-            {
-                sb.Append("|");
-                switch(m_board[i_lineIndex, i])
-                {
-                    case CellValues.EMPTY:
-                        sb.Append(" ");
-                        break;
-                    case CellValues.PLAYER_1:
-                        sb.Append("X");
-                        break;
-                    case CellValues.PLAYER_2:
-                        sb.Append("O");
-                        break;
-                }
-            }
-
-            return sb.ToString();
-
+            EMPTY,
+            PLAYER_1,
+            PLAYER_2
         }
-
-
-        private string getHorizontalIndexes() 
-        {
-            StringBuilder sb = new StringBuilder(" ");
-
-            for (int i = 1; i <= m_dimension; i++) {
-                sb.Append(" ").Append(i);
-            }
-            
-
-            return sb.ToString();
-        }
-
-        private void write(string i_stringToWrite)
-        {
-            System.Console.WriteLine(i_stringToWrite);
-        }
-    }
-
-    class Player
-    {
-        public Player(PlayerType i_playerType, string i_name)
-        {
-
-        }
-    }
-
-    enum PlayerType
-    {
-        HUMAN,
-        COMPUTER
-    }
-
-    enum CellValues
-    {
-        EMPTY,
-        PLAYER_1,
-        PLAYER_2
     }
 }
