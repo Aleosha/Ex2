@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Ex2
 {
-    class Program
+    public class Program
     {
 
 
@@ -19,7 +19,7 @@ namespace Ex2
 
     public class GameConsole
     {
-        private GameWorld worldRef;
+        private GameLogic m_GameLogic;
 
         public GameConsole()
         {
@@ -32,17 +32,17 @@ namespace Ex2
             bool endGame = false;
             while(!endGame)
             {
-                while (!worldRef.IsGameOver())
+                while (!m_GameLogic.IsGameOver())
                 {
                     Print();
                     showWhoseTurnItIs();
                     bool wasCellEmpty = false;
                     while (!wasCellEmpty)
                     {
-                        if (worldRef.CurrPlayer.PlayerType == PlayerType.HUMAN)
+                        if (m_GameLogic.CurrPlayer.PlayerType == ePlayerType.HUMAN)
                         {
                             makeHumanMove(ref wasCellEmpty);
-                            if(worldRef.GameTerminationStatus == eGameTerminationStatus.ABANDONED)
+                            if(m_GameLogic.GameTerminationStatus == eGameTerminationStatus.ABANDONED)
                             {
                                 break;
                             }
@@ -52,30 +52,33 @@ namespace Ex2
                             makeComputerMove();
                         }
                     }
-                    worldRef.AlternatePlayers();
+                    m_GameLogic.AlternatePlayers();
                 }
                 Print();
-                if (worldRef.GameTerminationStatus == eGameTerminationStatus.TIE)
-                {
-                    System.Console.WriteLine("It's a tie.");
-                }
-                else if (worldRef.GameTerminationStatus == eGameTerminationStatus.WON)
-                {
-                    System.Console.WriteLine("Player {0} won.", worldRef.CurrPlayer.ToString());
-                    worldRef.CurrPlayer.increaseScore();
-                }
-                else if(worldRef.GameTerminationStatus == eGameTerminationStatus.UNFINISHED)
-                {
-                    System.Console.WriteLine("The game has been left unfinished.");
-                }
-                else
-                {
-                    System.Console.WriteLine("The game has been abandoned.");
-                }
+                printGameEndingStatus();
                 showScores();
                 endGame = !proposeNewGame();
             }
-            
+        }
+
+        private void printGameEndingStatus()
+        {
+            if (m_GameLogic.GameTerminationStatus == eGameTerminationStatus.TIE)
+            {
+                System.Console.WriteLine("It's a tie.");
+            }
+            else if (m_GameLogic.GameTerminationStatus == eGameTerminationStatus.WON)
+            {
+                System.Console.WriteLine("Player {0} won.", m_GameLogic.CurrPlayer.ToString());
+            }
+            else if (m_GameLogic.GameTerminationStatus == eGameTerminationStatus.UNFINISHED)
+            {
+                System.Console.WriteLine("The game has been left unfinished.");
+            }
+            else
+            {
+                System.Console.WriteLine("The game has been abandoned.");
+            }
         }
 
         private bool proposeNewGame()
@@ -101,7 +104,7 @@ namespace Ex2
             while (!goodInput);
             if(playAgain == 1)
             {
-                worldRef.makeNewRound();
+                m_GameLogic.makeNewRound();
                 return true;
             }
             else
@@ -112,8 +115,8 @@ namespace Ex2
 
         private void showScores()
         {
-            System.Console.WriteLine("Player {0}'s score: {1}", worldRef.Player1.ToString(), worldRef.Player1.Score);
-            System.Console.WriteLine("Player {0}'s score: {1}", worldRef.Player2.ToString() ,worldRef.Player2.Score);
+            System.Console.WriteLine("Player {0}'s score: {1}", m_GameLogic.Player1.ToString(), m_GameLogic.Player1.Score);
+            System.Console.WriteLine("Player {0}'s score: {1}", m_GameLogic.Player2.ToString() ,m_GameLogic.Player2.Score);
         }
 
         private void makeComputerMove()
@@ -126,11 +129,11 @@ namespace Ex2
             int currRow = getRowFromUser();
             if(currRow == -1)
             {
-                worldRef.GameTerminationStatus = eGameTerminationStatus.ABANDONED;
+                m_GameLogic.GameTerminationStatus = eGameTerminationStatus.ABANDONED;
                 return;
             }
             int currColumn = getColumnFromUser();
-            io_WasCellEmpty = worldRef.SetCell(currRow, currColumn, worldRef.CurrPlayer.CellValue);
+            io_WasCellEmpty = m_GameLogic.SetCell(currRow, currColumn, m_GameLogic.CurrPlayer.CellValue);
             if (!io_WasCellEmpty)
             {
                 System.Console.WriteLine("Cell is already full. Choose another cell.");
@@ -139,7 +142,7 @@ namespace Ex2
 
         public void showWhoseTurnItIs()
         {
-            System.Console.WriteLine("It's {0}'s turn", worldRef.CurrPlayer.ToString());
+            System.Console.WriteLine("It's {0}'s turn", m_GameLogic.CurrPlayer.ToString());
         }
 
         private int getRowFromUser()
@@ -149,14 +152,14 @@ namespace Ex2
             int row;
             do
             {
-                System.Console.WriteLine("Please enter row (1-{0}):", worldRef.BoardDimension);
+                System.Console.WriteLine("Please enter row (1-{0}):", m_GameLogic.BoardDimension);
                 string inputText = System.Console.ReadLine();
                 numberIsInt = int.TryParse(inputText, out row);
                 if(!numberIsInt && inputText.Equals((string)("q")))
                 {
                     return -1;
                 }
-                if (!numberIsInt || row < 1 || row > worldRef.BoardDimension)
+                if (!numberIsInt || row < 1 || row > m_GameLogic.BoardDimension)
                 {
                     System.Console.WriteLine("The input you entered is invalid.");
                 }
@@ -177,10 +180,10 @@ namespace Ex2
             int column;
             do
             {
-                System.Console.WriteLine("Please enter column (1-{0}):", worldRef.BoardDimension);
+                System.Console.WriteLine("Please enter column (1-{0}):", m_GameLogic.BoardDimension);
                 string inputText = System.Console.ReadLine();
                 numberIsInt = int.TryParse(inputText, out column);
-                if (!numberIsInt || column < 1 || column > worldRef.BoardDimension)
+                if (!numberIsInt || column < 1 || column > m_GameLogic.BoardDimension)
                 {
                     System.Console.WriteLine("The input you entered is invalid.");
                 }
@@ -199,16 +202,16 @@ namespace Ex2
         {
             System.Console.WriteLine("Welcome to Reverse X Mix Drix!\n");
             int boardSize = getBoardSizeFromUser();
-            PlayerType pt = getPlayerTypeFromUser();
-            worldRef = new GameWorld(boardSize, pt);
+            ePlayerType pt = getPlayerTypeFromUser();
+            m_GameLogic = new GameLogic(boardSize, pt);
         }
 
-        private PlayerType getPlayerTypeFromUser()
+        private ePlayerType getPlayerTypeFromUser()
         {
             bool numberIsInt = false;
             bool goodInput = false;
             int numericPlayerType;
-            PlayerType pt;
+            ePlayerType pt;
             do
             {
                 System.Console.WriteLine("Please enter 1 for Human player or 2 for Computer:");
@@ -225,12 +228,7 @@ namespace Ex2
             }
             while (!goodInput);
 
-            return numericPlayerType == 1 ? PlayerType.HUMAN : PlayerType.COMPUTER;
-        }
-
-        public GameWorld World
-        {
-            get { return worldRef; }
+            return numericPlayerType == 1 ? ePlayerType.HUMAN : ePlayerType.COMPUTER;
         }
 
         private int getBoardSizeFromUser()
@@ -262,7 +260,7 @@ namespace Ex2
             Ex02.ConsoleUtils.Screen.Clear();
             write(getHorizontalIndexes());
 
-            for (int i = 0; i < worldRef.BoardDimension; i++)
+            for (int i = 0; i < m_GameLogic.BoardDimension; i++)
             {
                 write(getLine(i));
                 write(getSeparatorLine());
@@ -272,7 +270,7 @@ namespace Ex2
         private string getSeparatorLine()
         {
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < worldRef.BoardDimension * 2 + 2; i++)
+            for (int i = 0; i < m_GameLogic.BoardDimension * 2 + 2; i++)
             {
                 sb.Append("=");
             }
@@ -284,18 +282,18 @@ namespace Ex2
             StringBuilder sb = new StringBuilder();
 
             sb.Append(i_LineIndex + 1);
-            for (int i = 0; i < worldRef.BoardDimension; i++)
+            for (int i = 0; i < m_GameLogic.BoardDimension; i++)
             {
                 sb.Append("|");
-                switch (worldRef.Board[i_LineIndex, i])
+                switch (m_GameLogic.Board[i_LineIndex, i])
                 {
-                    case CellValue.EMPTY:
+                    case eCellValue.EMPTY:
                         sb.Append(" ");
                         break;
-                    case CellValue.PLAYER_1:
+                    case eCellValue.PLAYER_1:
                         sb.Append("X");
                         break;
-                    case CellValue.PLAYER_2:
+                    case eCellValue.PLAYER_2:
                         sb.Append("O");
                         break;
                 }
@@ -311,7 +309,7 @@ namespace Ex2
         {
             StringBuilder sb = new StringBuilder(" ");
 
-            for (int i = 1; i <= worldRef.BoardDimension; i++)
+            for (int i = 1; i <= m_GameLogic.BoardDimension; i++)
             {
                 sb.Append(" ").Append(i);
             }
@@ -326,12 +324,12 @@ namespace Ex2
         }
     }
 
-    public class GameWorld
+    public class GameLogic
     {
 
-        private CellValue[,] m_board;
-        private int m_dimension;
-        private CellValue cellValuesEnum;
+        private eCellValue[,] m_Board;
+        private int m_Dimension;
+        private eCellValue cellValuesEnum;
         private Player m_Player1, m_Player2, m_CurrPlayer;
         private eGameTerminationStatus m_GameTerminationStatus;
 
@@ -341,9 +339,9 @@ namespace Ex2
             set { m_GameTerminationStatus = value;}
         }
 
-        public CellValue[,] Board
+        public eCellValue[,] Board
         {
-            get { return m_board; }
+            get { return m_Board; }
         }
 
         public Player CurrPlayer
@@ -363,32 +361,32 @@ namespace Ex2
 
         public int BoardDimension
         {
-            get { return m_dimension; }
+            get { return m_Dimension; }
         }
 
-        public bool SetCell(int row, int column, CellValue value)
+        public bool SetCell(int row, int column, eCellValue value)
         {
-            if (CellValue.EMPTY.Equals(value))
+            if (eCellValue.EMPTY.Equals(value))
             {
                 return false;
             }
-            else if (!CellValue.EMPTY.Equals(m_board[row - 1, column - 1]))
+            else if (!eCellValue.EMPTY.Equals(m_Board[row - 1, column - 1]))
             {
                 return false;
             }
-            m_board[row - 1, column - 1] = value;
+            m_Board[row - 1, column - 1] = value;
 
             return true;
         }
 
         public void makeNewRound()
         {
-            m_board = new CellValue[m_dimension, m_dimension];
-            for (int i = 0; i < m_dimension; i++)
+            m_Board = new eCellValue[m_Dimension, m_Dimension];
+            for (int i = 0; i < m_Dimension; i++)
             {
-                for (int j = 0; j < m_dimension; j++)
+                for (int j = 0; j < m_Dimension; j++)
                 {
-                    m_board[i, j] = CellValue.EMPTY;
+                    m_Board[i, j] = eCellValue.EMPTY;
                 }
             }
             m_CurrPlayer = m_Player1;
@@ -416,6 +414,7 @@ namespace Ex2
             if (wonGame)
             {
                 m_GameTerminationStatus = eGameTerminationStatus.WON;
+                m_CurrPlayer.increaseScore();
             }
             return wonGame;
         }
@@ -423,13 +422,13 @@ namespace Ex2
         private bool isBoardFull()
         {
             bool fullBoard = true;
-            for (int i = 0; i < m_dimension; i++)
+            for (int i = 0; i < m_Dimension; i++)
             {
-                for (int j = 0; j < m_dimension; j++)
+                for (int j = 0; j < m_Dimension; j++)
                 {
 
-                    CellValue currentCell = m_board[i, j];
-                    if (CellValue.EMPTY.Equals(currentCell))
+                    eCellValue currentCell = m_Board[i, j];
+                    if (eCellValue.EMPTY.Equals(currentCell))
                     {
                         fullBoard = false;
                         break;
@@ -448,12 +447,12 @@ namespace Ex2
         {
 
             bool fullDiagonal = true;
-            for (int i = 0; i < m_dimension - 1; i++)
+            for (int i = 0; i < m_Dimension - 1; i++)
             {
-                CellValue currentCell = m_board[i, m_dimension - i - 1];
-                CellValue nextCell = m_board[i + 1, m_dimension - i - 2];
+                eCellValue currentCell = m_Board[i, m_Dimension - i - 1];
+                eCellValue nextCell = m_Board[i + 1, m_Dimension - i - 2];
 
-                if (CellValue.EMPTY.Equals(currentCell) || !nextCell.Equals(currentCell))
+                if (eCellValue.EMPTY.Equals(currentCell) || !nextCell.Equals(currentCell))
                 {
                     fullDiagonal = false;
                     break;
@@ -466,12 +465,12 @@ namespace Ex2
         private bool isDiagonalFull()
         {
             bool fullDiagonal = true;
-            for (int i = 0; i < m_dimension - 1; i++)
+            for (int i = 0; i < m_Dimension - 1; i++)
             {
-                CellValue currentCell = m_board[i, i];
-                CellValue nextCell = m_board[i + 1, i + 1];
+                eCellValue currentCell = m_Board[i, i];
+                eCellValue nextCell = m_Board[i + 1, i + 1];
 
-                if (CellValue.EMPTY.Equals(currentCell) || !nextCell.Equals(currentCell))
+                if (eCellValue.EMPTY.Equals(currentCell) || !nextCell.Equals(currentCell))
                 {
                     fullDiagonal = false;
                     break;
@@ -486,15 +485,15 @@ namespace Ex2
         private bool isColumnFull()
         {
             bool isGameOver = false;
-            for (int i = 0; i < m_dimension; i++)
+            for (int i = 0; i < m_Dimension; i++)
             {
                 bool fullColumn = true;
-                for (int j = 0; j < m_dimension - 1; j++)
+                for (int j = 0; j < m_Dimension - 1; j++)
                 {
 
-                    CellValue currentCell = m_board[j, i];
-                    CellValue nextCell = m_board[j + 1, i];
-                    if (CellValue.EMPTY.Equals(currentCell) || !nextCell.Equals(currentCell))
+                    eCellValue currentCell = m_Board[j, i];
+                    eCellValue nextCell = m_Board[j + 1, i];
+                    if (eCellValue.EMPTY.Equals(currentCell) || !nextCell.Equals(currentCell))
                     {
                         fullColumn = false;
                         break;
@@ -513,15 +512,15 @@ namespace Ex2
         private bool isRowFull()
         {
             bool isGameOver = false;
-            for (int i = 0; i < m_dimension; i++)
+            for (int i = 0; i < m_Dimension; i++)
             {
                 bool fullRow = true;
-                for (int j = 0; j < m_dimension - 1; j++)
+                for (int j = 0; j < m_Dimension - 1; j++)
                 {
 
-                    CellValue currentCell = m_board[i, j];
-                    CellValue nextCell = m_board[i, j + 1];
-                    if (CellValue.EMPTY.Equals(currentCell) || !nextCell.Equals(currentCell))
+                    eCellValue currentCell = m_Board[i, j];
+                    eCellValue nextCell = m_Board[i, j + 1];
+                    if (eCellValue.EMPTY.Equals(currentCell) || !nextCell.Equals(currentCell))
                     {
                         fullRow = false;
                         break;
@@ -537,17 +536,17 @@ namespace Ex2
             return isGameOver;
         }
 
-        public GameWorld(int i_dimension, PlayerType i_PlayerType)
+        public GameLogic(int i_Dimension, ePlayerType i_PlayerType)
         {
-            m_dimension = i_dimension;
-            m_Player1 = new Player(PlayerType.HUMAN, CellValue.PLAYER_1); // m_Player1 is always HUMAN
-            m_Player2 = new Player(i_PlayerType, CellValue.PLAYER_2); // m_Player2 is the one whose type changes depending on the user's input
+            m_Dimension = i_Dimension;
+            m_Player1 = new Player(ePlayerType.HUMAN, eCellValue.PLAYER_1); // m_Player1 is always HUMAN
+            m_Player2 = new Player(i_PlayerType, eCellValue.PLAYER_2); // m_Player2 is the one whose type changes depending on the user's input
             makeNewRound();
         }
 
-        public CellValue GetCell(int i, int j)
+        public eCellValue GetCell(int i, int j)
         {
-            return m_board[i - 1, j - 1];
+            return m_Board[i - 1, j - 1];
         }
 
 
@@ -560,16 +559,16 @@ namespace Ex2
 
     public class Player
     {
-        PlayerType m_PlayerType;
-        CellValue m_CellValue;
-        int m_score = 0;
+        ePlayerType m_PlayerType;
+        eCellValue m_CellValue;
+        int m_Score = 0;
 
-        public Player(PlayerType i_playerType, string i_name)
+        public Player(ePlayerType i_playerType, string i_Name)
         {
 
         }
 
-        public Player(PlayerType i_PlayerType, CellValue i_CellValue)
+        public Player(ePlayerType i_PlayerType, eCellValue i_CellValue)
         {
             m_PlayerType = i_PlayerType;
             m_CellValue = i_CellValue;
@@ -577,31 +576,31 @@ namespace Ex2
 
         public int Score
         {
-            get { return m_score; }
+            get { return m_Score; }
         }
 
-        public CellValue CellValue
+        public eCellValue CellValue
         {
             get { return m_CellValue; }
         }
 
-        public PlayerType PlayerType
+        public ePlayerType PlayerType
         {
             get { return m_PlayerType; }
         }
 
         public string ToString()
         {
-            return m_CellValue == CellValue.PLAYER_1 ? "X" : "O";
+            return m_CellValue == eCellValue.PLAYER_1 ? "X" : "O";
         }
 
         public void increaseScore()
         {
-            m_score++;
+            m_Score++;
         }
     }
 
-    public enum PlayerType
+    public enum ePlayerType
     {
         HUMAN,
         COMPUTER

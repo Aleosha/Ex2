@@ -9,11 +9,11 @@ namespace Ex2
         private const int ROW_INDEX = 0;
         private const int COLUMN_INDEX = 1;
 
-        public static int[] getBestOption(GameWorld world)
+        public static int[] getBestOption(GameLogic i_Game)
         {
             int[] bestOption = new int[2] { 1, 1 };
             float bestOptionWeight = 0;
-            int dimensions = world.BoardDimension;
+            int dimensions = i_Game.BoardDimension;
             int[][] options = new int[dimensions*dimensions][];
 
             int optionsCount = 0;
@@ -21,7 +21,7 @@ namespace Ex2
             {
                 for (int j = 1; j <= dimensions; j++)
                 {
-                    if (CellValue.EMPTY.Equals(world.GetCell(i, j)))
+                    if (eCellValue.EMPTY.Equals(i_Game.GetCell(i, j)))
                     {
                         options[optionsCount] = new int[] { i, j};
                         optionsCount++;
@@ -31,7 +31,7 @@ namespace Ex2
 
             for (int i = 0; i < optionsCount; i++ )
             {
-                float currentOptionWeight = weightOption(options[i], world);
+                float currentOptionWeight = weightOption(options[i], i_Game);
                 if (currentOptionWeight > bestOptionWeight)
                 {
                     bestOptionWeight = currentOptionWeight;
@@ -42,25 +42,25 @@ namespace Ex2
             return bestOption;
         }
 
-        private static float weightOption(int[] p, GameWorld world)
+        private static float weightOption(int[] p, GameLogic i_Game)
         {
             float weight = 0;
             
             int row = p[ROW_INDEX];
             int column = p[COLUMN_INDEX];
-            int dimensions = world.BoardDimension;
+            int dimensions = i_Game.BoardDimension;
             bool isOnDiagonal = (row == column) || (row+column==dimensions+1);
 
             for (int i = 1; i <= dimensions; i++)
             {
                 if (i != column)
                 {
-                    switch (world.GetCell(row, i)) 
+                    switch (i_Game.GetCell(row, i)) 
                     {
-                        case CellValue.EMPTY:
+                        case eCellValue.EMPTY:
                             weight++;
                             break;
-                        case CellValue.PLAYER_2:
+                        case eCellValue.PLAYER_2:
                             weight--;
                             break;            
                     }
@@ -72,12 +72,12 @@ namespace Ex2
             {
                 if (i != row)
                 {
-                    switch (world.GetCell(i, column))
+                    switch (i_Game.GetCell(i, column))
                     {
-                        case CellValue.EMPTY:
+                        case eCellValue.EMPTY:
                             weight++;
                             break;
-                        case CellValue.PLAYER_2:
+                        case eCellValue.PLAYER_2:
                             weight--;
                             break;
                     }
@@ -94,9 +94,9 @@ namespace Ex2
         }
 
 
-        internal static string printBestOption(GameWorld world)
+        internal static string printBestOption(GameLogic i_Game)
         {
-            int[] bestOption = getBestOption(world);
+            int[] bestOption = getBestOption(i_Game);
             StringBuilder sb = new StringBuilder();
 
             for (int i = 0; i < bestOption.Length; i++)

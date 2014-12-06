@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Ex2
 {
-    public enum CellValue
+    public enum eCellValue
     {
         EMPTY,
         PLAYER_1,
