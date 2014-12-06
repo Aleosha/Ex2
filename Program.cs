@@ -16,12 +16,12 @@ namespace Ex2
             // Do you want to play agains another player or against computer
 
 
-            GameWorld world = new GameWorld(3);
-            GameConsole myConsole = new GameConsole(world);
+            //GameWorld world = new GameWorld(3);
+            GameConsole myConsole = new GameConsole();
+            //myConsole.Print();
+            myConsole.World.SetCell(1, 1, CellValues.PLAYER_1);
             myConsole.Print();
-            //world.SetCell(1, 1, CellValues.PLAYER_1);
-     
-     
+
             // Horizontal
             /*  
              * world.SetCell(1, 1, CellValues.PLAYER_1);
@@ -48,9 +48,71 @@ namespace Ex2
     {
         private GameWorld worldRef;
 
-        public GameConsole(GameWorld gameWorld)
+        public GameConsole()
         {
-            worldRef = gameWorld;
+            InitializeGame();
+        }
+
+        public void InitializeGame()
+        {
+            System.Console.WriteLine("Welcome to Reverse X Mix Drix!\n");
+            int boardSize = getBoardSizeFromUser();
+            PlayerType pt = getPlayerTypeFromUser();
+            worldRef = new GameWorld(boardSize); // TODO:  change GameWorld ctor to receive the player type
+        }
+
+        private PlayerType getPlayerTypeFromUser()
+        {
+            bool numberIsInt = false;
+            bool goodInput = false;
+            int numericPlayerType;
+            PlayerType pt;
+            do
+            {
+                System.Console.WriteLine("Please enter 1 for Human player or 2 for Computer:");
+                string inputText = System.Console.ReadLine();
+                numberIsInt = int.TryParse(inputText, out numericPlayerType);
+                if (!numberIsInt || numericPlayerType < 1 || numericPlayerType > 2)
+                {
+                    System.Console.WriteLine("The input you entered is invalid.");
+                }
+                else
+                {
+                    goodInput = true;
+                }
+            }
+            while (!goodInput);
+
+            return numericPlayerType == 1 ? PlayerType.HUMAN : PlayerType.COMPUTER;
+        }
+
+        public GameWorld World
+        {
+            get { return worldRef; }
+        }
+
+        private int getBoardSizeFromUser()
+        {
+            bool numberIsInt = false;
+            bool goodInput = false;
+            int boardSize = 0;
+            do
+            {
+                System.Console.WriteLine("Please enter desired board size (3-9):");
+                string inputText = System.Console.ReadLine();
+                numberIsInt = int.TryParse(inputText, out boardSize);
+                if (!numberIsInt || boardSize < 3 || boardSize > 9)
+                {
+                    System.Console.WriteLine("The input you entered is invalid.");
+                }
+                else
+                {
+                    goodInput = true;
+                }
+            }
+            while (!goodInput);
+
+            return boardSize;
         }
 
         public void Print()
@@ -153,9 +215,9 @@ namespace Ex2
             return true;
         }
 
-        public bool IsGameOver() 
+        public bool IsGameOver()
         {
-            
+
             // Check vertical
             // Check horizontal
             // Check diagonal left to right
@@ -195,7 +257,7 @@ namespace Ex2
                     fullDiagonal = false;
                     break;
                 }
- 
+
             }
             return fullDiagonal;
         }
@@ -274,7 +336,7 @@ namespace Ex2
             return m_board[i - 1, j - 1];
         }
 
-        
+
     }
 
     class Player
