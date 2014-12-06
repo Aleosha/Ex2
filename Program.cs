@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Ex2
 {
@@ -18,21 +16,31 @@ namespace Ex2
 
 
             GameWorld world = new GameWorld(3);
-            world.SetCell(1, 1, CellValues.PLAYER_1);
+            
      
             // Horizontal
             /*  
+             * world.SetCell(1, 1, CellValues.PLAYER_1);
           world.SetCell(1, 2, CellValues.PLAYER_1);
             world.SetCell(1, 3, CellValues.PLAYER_1);
          * /
             // Vertical
+             * world.SetCell(1, 1, CellValues.PLAYER_1);
         /*    world.SetCell(2, 1, CellValues.PLAYER_1);
             world.SetCell(3, 1, CellValues.PLAYER_1);
          */
 
             // Diagonal
+            /*
+            world.SetCell(1, 1, CellValues.PLAYER_1);
+          //  world.SetCell(2, 2, CellValues.PLAYER_1);
+           // world.SetCell(3, 3, CellValues.PLAYER_1);
+             */
+
+            // Reverse diagonal
+            world.SetCell(1, 3, CellValues.PLAYER_1);
             world.SetCell(2, 2, CellValues.PLAYER_1);
-            world.SetCell(3, 3, CellValues.PLAYER_1);
+            world.SetCell(3, 1, CellValues.PLAYER_1);
 
             world.Print();
             System.Console.WriteLine("Is game over? " + world.IsGameOver());
@@ -74,10 +82,28 @@ namespace Ex2
 
         private bool isReverseDiagonalFull()
         {
-            bool isGameOver = false;
+
+            bool fullDiagonal = true;
             for (int i = 0; i < m_dimension - 1; i++)
             {
-                bool fullDiagonal = true;
+                CellValues currentCell = m_board[i, m_dimension - i - 1];
+                CellValues nextCell = m_board[i + 1, m_dimension - i - 2];
+
+                if (CellValues.EMPTY.Equals(currentCell) || !nextCell.Equals(currentCell))
+                {
+                    fullDiagonal = false;
+                    break;
+                }            
+            }
+
+            return fullDiagonal;
+        }
+
+        private bool isDiagonalFull()
+        {
+            bool fullDiagonal = true;
+            for (int i = 0; i < m_dimension - 1; i++)
+            {
                 CellValues currentCell = m_board[i, i];
                 CellValues nextCell = m_board[i + 1, i + 1];
 
@@ -86,18 +112,9 @@ namespace Ex2
                     fullDiagonal = false;
                     break;
                 }
-                if (fullDiagonal)
-                {
-                    isGameOver = true;
-                    break;
-                }
+ 
             }
-            return isGameOver;
-        }
-
-        private bool isDiagonalFull()
-        {
-            return false;
+            return fullDiagonal;
         }
 
 
