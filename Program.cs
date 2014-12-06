@@ -268,10 +268,5 @@ namespace Ex2
         COMPUTER
     }
 
-    enum CellValues
-    {
-        EMPTY,
-        PLAYER_1,
-        PLAYER_2
-    }
+
 }
