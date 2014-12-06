@@ -252,6 +252,16 @@ namespace Ex2
         {
             System.Console.WriteLine(i_stringToWrite);
         }
+
+        internal int GetDimensions()
+        {
+            return this.m_dimension;
+        }
+
+        public CellValues GetCell(int i, int j)
+        {
+            return m_board[i - 1, j - 1];
+        }
     }
 
     class Player
