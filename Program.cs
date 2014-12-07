@@ -320,7 +320,7 @@ namespace Ex2
 
         private string getHorizontalIndexes()
         {
-            StringBuilder sb = new StringBuilder(EMPTY_CELL_SIGN);
+            StringBuilder sb = new StringBuilder(EMPTY_CELL_SIGN.ToString());
 
             for (int i = 1; i <= m_GameLogic.BoardDimension; i++)
             {
