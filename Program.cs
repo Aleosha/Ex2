@@ -49,7 +49,7 @@ namespace Ex2
                         }
                         else
                         {
-                            makeComputerMove();
+                            makeComputerMove(ref wasCellEmpty);
                         }
                     }
                     m_GameLogic.AlternatePlayers();
@@ -119,9 +119,14 @@ namespace Ex2
             System.Console.WriteLine("Player {0}'s score: {1}", m_GameLogic.Player2.ToString() ,m_GameLogic.Player2.Score);
         }
 
-        private void makeComputerMove()
+        private void makeComputerMove(ref bool io_WasCellEmpty)
         {
-            throw new NotImplementedException();
+            int[] bestOption = ComputerPlayerLogic.getBestOption(m_GameLogic);
+            io_WasCellEmpty = m_GameLogic.SetCell(bestOption[0], bestOption[1], m_GameLogic.CurrPlayer.CellValue);
+            if (!io_WasCellEmpty)
+            {
+                System.Console.WriteLine("Computer made an illegal move");
+            }
         }
 
         private void makeHumanMove(ref bool io_WasCellEmpty)
@@ -211,7 +216,7 @@ namespace Ex2
             bool numberIsInt = false;
             bool goodInput = false;
             int numericPlayerType;
-            ePlayerType pt;
+            
             do
             {
                 System.Console.WriteLine("Please enter 1 for Human player or 2 for Computer:");
@@ -328,8 +333,7 @@ namespace Ex2
     {
 
         private eCellValue[,] m_Board;
-        private int m_Dimension;
-        private eCellValue cellValuesEnum;
+        private int m_Dimension;       
         private Player m_Player1, m_Player2, m_CurrPlayer;
         private eGameTerminationStatus m_GameTerminationStatus;
 
@@ -555,6 +559,8 @@ namespace Ex2
         {
             m_CurrPlayer = (m_CurrPlayer.CellValue == m_Player1.CellValue) ? m_Player2 : m_Player1;
         }
+
+   
     }
 
     public class Player
