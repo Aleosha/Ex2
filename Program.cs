@@ -25,8 +25,8 @@ namespace Ex2
         private const char ROW_SEPARATOR = '=';
         private const char COLUMN_SEPARATOR = '|';
         private const char EMPTY_CELL_SIGN = ' ';
-        private const char PLAYER_1_SIGN = 'X';
-        private const char PLAYER_2_SIGN = 'O';
+        public const char PLAYER_1_SIGN = 'X';
+        public const char PLAYER_2_SIGN = 'O';
         private const int END_GAME_CODE = -1;
 
         public GameConsole()
@@ -112,7 +112,7 @@ namespace Ex2
             while (!goodInput);
             if(playAgain == 1)
             {
-                m_GameLogic.makeNewRound();
+                m_GameLogic.MakeNewRound();
                 return true;
             }
             else
@@ -320,11 +320,11 @@ namespace Ex2
 
         private string getHorizontalIndexes()
         {
-            StringBuilder sb = new StringBuilder(" ");
+            StringBuilder sb = new StringBuilder(EMPTY_CELL_SIGN);
 
             for (int i = 1; i <= m_GameLogic.BoardDimension; i++)
             {
-                sb.Append(" ").Append(i);
+                sb.Append(EMPTY_CELL_SIGN).Append(i);
             }
 
 
@@ -391,7 +391,7 @@ namespace Ex2
             return true;
         }
 
-        public void makeNewRound()
+        public void MakeNewRound()
         {
             m_Board = new eCellValue[m_Dimension, m_Dimension];
             for (int i = 0; i < m_Dimension; i++)
@@ -553,7 +553,7 @@ namespace Ex2
             m_Dimension = i_Dimension;
             m_Player1 = new Player(ePlayerType.HUMAN, eCellValue.PLAYER_1); // m_Player1 is always HUMAN
             m_Player2 = new Player(i_PlayerType, eCellValue.PLAYER_2); // m_Player2 is the one whose type changes depending on the user's input
-            makeNewRound();
+            MakeNewRound();
         }
 
         public eCellValue GetCell(int i, int j)
@@ -605,7 +605,7 @@ namespace Ex2
 
         public string ToString()
         {
-            return m_CellValue == eCellValue.PLAYER_1 ? "X" : "O";
+            return char.ToString((m_CellValue == eCellValue.PLAYER_1 ? GameConsole.PLAYER_1_SIGN : GameConsole.PLAYER_2_SIGN));
         }
 
         public void increaseScore()
