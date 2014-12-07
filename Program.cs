@@ -20,10 +20,18 @@ namespace Ex2
     public class GameConsole
     {
         private GameLogic m_GameLogic;
+        private const int MAX_BOARD_SIZE = 9;
+        private const int MIN_BOARD_SIZE = 3;
+        private const char ROW_SEPARATOR = '=';
+        private const char COLUMN_SEPARATOR = '|';
+        private const char EMPTY_CELL_SIGN = ' ';
+        private const char PLAYER_1_SIGN = 'X';
+        private const char PLAYER_2_SIGN = 'O';
+        private const int END_GAME_CODE = -1;
 
         public GameConsole()
         {
-            InitializeGame();
+            initializeGame();
             RunGame();
         }
 
@@ -132,7 +140,7 @@ namespace Ex2
         private void makeHumanMove(ref bool io_WasCellEmpty)
         {
             int currRow = getRowFromUser();
-            if(currRow == -1)
+            if(currRow == END_GAME_CODE)
             {
                 m_GameLogic.GameTerminationStatus = eGameTerminationStatus.ABANDONED;
                 return;
@@ -162,7 +170,7 @@ namespace Ex2
                 numberIsInt = int.TryParse(inputText, out row);
                 if(!numberIsInt && inputText.Equals((string)("q")))
                 {
-                    return -1;
+                    return END_GAME_CODE;
                 }
                 if (!numberIsInt || row < 1 || row > m_GameLogic.BoardDimension)
                 {
@@ -203,7 +211,7 @@ namespace Ex2
         }
 
 
-        private void InitializeGame()
+        private void initializeGame()
         {
             System.Console.WriteLine("Welcome to Reverse X Mix Drix!\n");
             int boardSize = getBoardSizeFromUser();
@@ -246,7 +254,7 @@ namespace Ex2
                 System.Console.WriteLine("Please enter desired board size (3-9):");
                 string inputText = System.Console.ReadLine();
                 numberIsInt = int.TryParse(inputText, out boardSize);
-                if (!numberIsInt || boardSize < 3 || boardSize > 9)
+                if (!numberIsInt || boardSize < MIN_BOARD_SIZE || boardSize > MAX_BOARD_SIZE)
                 {
                     System.Console.WriteLine("The input you entered is invalid.");
                 }
@@ -277,7 +285,7 @@ namespace Ex2
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < m_GameLogic.BoardDimension * 2 + 2; i++)
             {
-                sb.Append("=");
+                sb.Append(ROW_SEPARATOR);
             }
             return sb.ToString();
         }
@@ -289,21 +297,21 @@ namespace Ex2
             sb.Append(i_LineIndex + 1);
             for (int i = 0; i < m_GameLogic.BoardDimension; i++)
             {
-                sb.Append("|");
+                sb.Append(COLUMN_SEPARATOR);
                 switch (m_GameLogic.Board[i_LineIndex, i])
                 {
                     case eCellValue.EMPTY:
-                        sb.Append(" ");
+                        sb.Append(EMPTY_CELL_SIGN);
                         break;
                     case eCellValue.PLAYER_1:
-                        sb.Append("X");
+                        sb.Append(PLAYER_1_SIGN);
                         break;
                     case eCellValue.PLAYER_2:
-                        sb.Append("O");
+                        sb.Append(PLAYER_2_SIGN);
                         break;
                 }
             }
-            sb.Append("|");
+            sb.Append(COLUMN_SEPARATOR);
 
             return sb.ToString();
 
