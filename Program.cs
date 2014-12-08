@@ -20,22 +20,22 @@ namespace Ex2
     public class GameConsole
     {
         private GameLogic m_GameLogic;
-        private const int MAX_BOARD_SIZE = 9;
-        private const int MIN_BOARD_SIZE = 3;
-        private const char ROW_SEPARATOR = '=';
-        private const char COLUMN_SEPARATOR = '|';
-        private const char EMPTY_CELL_SIGN = ' ';
-        public const char PLAYER_1_SIGN = 'X';
-        public const char PLAYER_2_SIGN = 'O';
-        private const int END_GAME_CODE = -1;
+
+        private const int k_MaxBoardSize = 9;
+        private const int k_MinBoardSize = 3;
+        private const char k_RowSeparator = '=';
+        private const char k_ColumnSeparator = '|';
+        private const char k_EmptyCellSign = ' ';
+        private const int k_EndGameCode = -1;
+        private const int k_PlayAgainCode = 1;
 
         public GameConsole()
         {
             initializeGame();
-            RunGame();
+            runGame();
         }
 
-        private void RunGame()
+        private void runGame()
         {
             bool endGame = false;
             while(!endGame)
@@ -110,7 +110,7 @@ namespace Ex2
                 }
             }
             while (!goodInput);
-            if(playAgain == 1)
+            if(playAgain == k_PlayAgainCode)
             {
                 m_GameLogic.MakeNewRound();
                 return true;
@@ -140,7 +140,7 @@ namespace Ex2
         private void makeHumanMove(ref bool io_WasCellEmpty)
         {
             int currRow = getRowFromUser();
-            if(currRow == END_GAME_CODE)
+            if(currRow == k_EndGameCode)
             {
                 m_GameLogic.GameTerminationStatus = eGameTerminationStatus.ABANDONED;
                 return;
@@ -170,7 +170,7 @@ namespace Ex2
                 numberIsInt = int.TryParse(inputText, out row);
                 if(!numberIsInt && inputText.Equals((string)("q")))
                 {
-                    return END_GAME_CODE;
+                    return k_EndGameCode;
                 }
                 if (!numberIsInt || row < 1 || row > m_GameLogic.BoardDimension)
                 {
@@ -254,7 +254,7 @@ namespace Ex2
                 System.Console.WriteLine("Please enter desired board size (3-9):");
                 string inputText = System.Console.ReadLine();
                 numberIsInt = int.TryParse(inputText, out boardSize);
-                if (!numberIsInt || boardSize < MIN_BOARD_SIZE || boardSize > MAX_BOARD_SIZE)
+                if (!numberIsInt || boardSize < k_MinBoardSize || boardSize > k_MaxBoardSize)
                 {
                     System.Console.WriteLine("The input you entered is invalid.");
                 }
@@ -285,50 +285,50 @@ namespace Ex2
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < m_GameLogic.BoardDimension * 2 + 2; i++)
             {
-                sb.Append(ROW_SEPARATOR);
+                sb.Append(k_RowSeparator);
             }
             return sb.ToString();
         }
 
         private string getLine(int i_LineIndex)
         {
-            StringBuilder sb = new StringBuilder();
+            StringBuilder stringBuilder = new StringBuilder();
 
-            sb.Append(i_LineIndex + 1);
+            stringBuilder.Append(i_LineIndex + 1);
             for (int i = 0; i < m_GameLogic.BoardDimension; i++)
             {
-                sb.Append(COLUMN_SEPARATOR);
+                stringBuilder.Append(k_ColumnSeparator);
                 switch (m_GameLogic.Board[i_LineIndex, i])
                 {
                     case eCellValue.EMPTY:
-                        sb.Append(EMPTY_CELL_SIGN);
+                        stringBuilder.Append(k_EmptyCellSign);
                         break;
                     case eCellValue.PLAYER_1:
-                        sb.Append(PLAYER_1_SIGN);
+                        stringBuilder.Append(Player.PLAYER_1_SIGN);
                         break;
                     case eCellValue.PLAYER_2:
-                        sb.Append(PLAYER_2_SIGN);
+                        stringBuilder.Append(Player.PLAYER_2_SIGN);
                         break;
                 }
             }
-            sb.Append(COLUMN_SEPARATOR);
+            stringBuilder.Append(k_ColumnSeparator);
 
-            return sb.ToString();
+            return stringBuilder.ToString();
 
         }
 
 
         private string getHorizontalIndexes()
         {
-            StringBuilder sb = new StringBuilder(EMPTY_CELL_SIGN.ToString());
+            StringBuilder stringBuilder = new StringBuilder(k_EmptyCellSign.ToString());
 
             for (int i = 1; i <= m_GameLogic.BoardDimension; i++)
             {
-                sb.Append(EMPTY_CELL_SIGN).Append(i);
+                stringBuilder.Append(k_EmptyCellSign).Append(i);
             }
 
 
-            return sb.ToString();
+            return stringBuilder.ToString();
         }
 
         private void write(string i_stringToWrite)
@@ -575,6 +575,10 @@ namespace Ex2
     {
         ePlayerType m_PlayerType;
         eCellValue m_CellValue;
+
+        public const char PLAYER_1_SIGN = 'X';
+        public const char PLAYER_2_SIGN = 'O';
+
         int m_Score = 0;
 
         public Player(ePlayerType i_playerType, string i_Name)
@@ -605,7 +609,7 @@ namespace Ex2
 
         public string ToString()
         {
-            return char.ToString((m_CellValue == eCellValue.PLAYER_1 ? GameConsole.PLAYER_1_SIGN : GameConsole.PLAYER_2_SIGN));
+            return char.ToString((m_CellValue == eCellValue.PLAYER_1 ? PLAYER_1_SIGN : PLAYER_2_SIGN));
         }
 
         public void increaseScore()
