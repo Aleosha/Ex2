@@ -376,19 +376,23 @@ namespace Ex2
             get { return m_Dimension; }
         }
 
-        public bool SetCell(int row, int column, eCellValue value)
+        public bool SetCell(int i_Row, int i_Column, eCellValue i_CellValue)
         {
-            if (eCellValue.EMPTY.Equals(value))
+            bool setSuccessful = true;
+            if (eCellValue.EMPTY.Equals(i_CellValue))
             {
-                return false;
+                setSuccessful = false;
             }
-            else if (!eCellValue.EMPTY.Equals(m_Board[row - 1, column - 1]))
+            else if (!eCellValue.EMPTY.Equals(m_Board[i_Row - 1, i_Column - 1]))
             {
-                return false;
+                setSuccessful = false;
             }
-            m_Board[row - 1, column - 1] = value;
+            else
+            {
+                m_Board[i_Row - 1, i_Column - 1] = i_CellValue;
+            }            
 
-            return true;
+            return setSuccessful;
         }
 
         public void MakeNewRound()
@@ -407,11 +411,6 @@ namespace Ex2
 
         public bool IsGameOver()
         {
-
-            // Check vertical
-            // Check horizontal
-            // Check diagonal left to right
-            // Check diagonal right to left
             return isGameWon() || isBoardFull() || isGameAbandoned();
         }
 
@@ -438,14 +437,12 @@ namespace Ex2
             {
                 for (int j = 0; j < m_Dimension; j++)
                 {
-
                     eCellValue currentCell = m_Board[i, j];
                     if (eCellValue.EMPTY.Equals(currentCell))
                     {
                         fullBoard = false;
                         break;
                     }
-
                 }
             }
             if (fullBoard)
@@ -457,7 +454,6 @@ namespace Ex2
 
         private bool isReverseDiagonalFull()
         {
-
             bool fullDiagonal = true;
             for (int i = 0; i < m_Dimension - 1; i++)
             {
@@ -556,12 +552,10 @@ namespace Ex2
             MakeNewRound();
         }
 
-        public eCellValue GetCell(int i, int j)
+        public eCellValue GetCell(int i_Row, int i_Column)
         {
-            return m_Board[i - 1, j - 1];
+            return m_Board[i_Row - 1, i_Column - 1];
         }
-
-
 
         internal void AlternatePlayers()
         {
