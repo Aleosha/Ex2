@@ -72,6 +72,7 @@ namespace Ex2
                     m_Board[i, j] = eCellValue.EMPTY;
                 }
             }
+
             m_CurrPlayer = m_Player1;
             m_GameTerminationStatus = eGameTerminationStatus.UNFINISHED;
         }
@@ -94,6 +95,7 @@ namespace Ex2
                 m_GameTerminationStatus = eGameTerminationStatus.WON;
                 m_CurrPlayer.increaseScore();
             }
+
             return wonGame;
         }
 
@@ -112,6 +114,7 @@ namespace Ex2
                     }
                 }
             }
+
             if (fullBoard)
             {
                 m_GameTerminationStatus = eGameTerminationStatus.TIE;
@@ -122,10 +125,10 @@ namespace Ex2
         private bool isReverseDiagonalFull()
         {
             bool fullDiagonal = true;
-            for (int i = 0; i < m_Dimension - 1; i++)
+            for (int i = 0; i < this.m_Dimension - 1; i++)
             {
-                eCellValue currentCell = m_Board[i, m_Dimension - i - 1];
-                eCellValue nextCell = m_Board[i + 1, m_Dimension - i - 2];
+                eCellValue currentCell = this.m_Board[i, this.m_Dimension - i - 1];
+                eCellValue nextCell = this.m_Board[i + 1, m_Dimension - i - 2];
 
                 if (eCellValue.EMPTY.Equals(currentCell) || !nextCell.Equals(currentCell))
                 {
@@ -150,12 +153,9 @@ namespace Ex2
                     fullDiagonal = false;
                     break;
                 }
-
             }
             return fullDiagonal;
         }
-
-
 
         private bool isColumnFull()
         {
@@ -175,6 +175,7 @@ namespace Ex2
                     }
 
                 }
+
                 if (fullColumn)
                 {
                     isGameOver = true;

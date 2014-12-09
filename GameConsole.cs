@@ -291,10 +291,10 @@ namespace Ex2
                         stringBuilder.Append(k_EmptyCellSign);
                         break;
                     case eCellValue.PLAYER_1:
-                        stringBuilder.Append(Player.PLAYER_1_SIGN);
+                        stringBuilder.Append(Player.k_Player1Sign);
                         break;
                     case eCellValue.PLAYER_2:
-                        stringBuilder.Append(Player.PLAYER_2_SIGN);
+                        stringBuilder.Append(Player.k_Player2Sign);
                         break;
                 }
             }

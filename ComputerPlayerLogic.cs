@@ -6,8 +6,6 @@ namespace Ex2
 {
     class ComputerPlayerLogic
     {
-        private const int ROW_INDEX = 0;
-        private const int COLUMN_INDEX = 1;
         private const float k_DiagonalFactor = 0.5f;
 
         public static MoveOption GetBestOption(GameLogic i_Game)
@@ -95,7 +93,6 @@ namespace Ex2
 
             return weight;
         }
-
 
         internal static string printBestOption(GameLogic i_Game)
         {

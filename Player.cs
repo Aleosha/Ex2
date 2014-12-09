@@ -6,14 +6,13 @@ namespace Ex2
 {
     public class Player
     {
-        ePlayerType m_PlayerType;
-        eCellValue m_CellValue;
+        private ePlayerType m_PlayerType;
+        private eCellValue m_CellValue;
 
-        public const char PLAYER_1_SIGN = 'X';
-        public const char PLAYER_2_SIGN = 'O';
+        public const char k_Player1Sign = 'X';
+        public const char k_Player2Sign = 'O';
 
         int m_Score = 0;
-
 
         public Player(ePlayerType i_PlayerType, eCellValue i_CellValue)
         {
@@ -38,7 +37,7 @@ namespace Ex2
 
         public string ToString()
         {
-            return char.ToString((m_CellValue == eCellValue.PLAYER_1 ? PLAYER_1_SIGN : PLAYER_2_SIGN));
+            return char.ToString((m_CellValue == eCellValue.PLAYER_1 ? k_Player1Sign : k_Player2Sign));
         }
 
         public void increaseScore()
