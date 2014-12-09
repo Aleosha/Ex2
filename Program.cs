@@ -129,7 +129,7 @@ namespace Ex2
 
         private void makeComputerMove(ref bool io_WasCellEmpty)
         {
-            int[] bestOption = ComputerPlayerLogic.getBestOption(m_GameLogic);
+            int[] bestOption = ComputerPlayerLogic.GetBestOption(m_GameLogic);
             io_WasCellEmpty = m_GameLogic.SetCell(bestOption[0], bestOption[1], m_GameLogic.CurrPlayer.CellValue);
             if (!io_WasCellEmpty)
             {

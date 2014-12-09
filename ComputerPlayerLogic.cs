@@ -8,11 +8,12 @@ namespace Ex2
     {
         private const int ROW_INDEX = 0;
         private const int COLUMN_INDEX = 1;
+        private const float k_DiagonalFactor = 0.5f;
 
-        public static int[] getBestOption(GameLogic i_Game)
+        public static int[] GetBestOption(GameLogic i_Game)
         {
-            int[] bestOption = new int[2] { 1, 1 };
-            float bestOptionWeight = 0;
+            int[] bestOption = new int[2];
+            float bestOptionWeight = -1;
             int dimensions = i_Game.BoardDimension;
             int[][] options = new int[dimensions*dimensions][];
 
@@ -51,6 +52,7 @@ namespace Ex2
             int dimensions = i_Game.BoardDimension;
             bool isOnDiagonal = (row == column) || (row+column==dimensions+1);
 
+            // Count horizontal 
             for (int i = 1; i <= dimensions; i++)
             {
                 if (i != column)
@@ -68,6 +70,7 @@ namespace Ex2
                 }
             }
 
+            // Count vertical
             for (int i = 1; i <= dimensions; i++)
             {
                 if (i != row)
@@ -87,7 +90,7 @@ namespace Ex2
 
             if (isOnDiagonal)
             {
-                weight *= 0.5f;
+                weight *= k_DiagonalFactor;
             }
 
             return weight;
@@ -96,19 +99,19 @@ namespace Ex2
 
         internal static string printBestOption(GameLogic i_Game)
         {
-            int[] bestOption = getBestOption(i_Game);
-            StringBuilder sb = new StringBuilder();
+            int[] bestOption = GetBestOption(i_Game);
+            StringBuilder stringBuilder = new StringBuilder();
 
             for (int i = 0; i < bestOption.Length; i++)
             {
                 if (i > 0)
                 {
-                    sb.Append(",");
+                    stringBuilder.Append(",");
                 }
-                sb.Append(bestOption[i]);
+                stringBuilder.Append(bestOption[i]);
             }
 
-            return sb.ToString();
+            return stringBuilder.ToString();
         }
     }
 }
