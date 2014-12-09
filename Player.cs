@@ -12,7 +12,7 @@ namespace Ex2
         public const char k_Player1Sign = 'X';
         public const char k_Player2Sign = 'O';
 
-        int m_Score = 0;
+        private int m_Score = 0;
 
         public Player(ePlayerType i_PlayerType, eCellValue i_CellValue)
         {
@@ -37,7 +37,7 @@ namespace Ex2
 
         public string ToString()
         {
-            return char.ToString((m_CellValue == eCellValue.PLAYER_1 ? k_Player1Sign : k_Player2Sign));
+            return char.ToString(m_CellValue == eCellValue.PLAYER_1 ? k_Player1Sign : k_Player2Sign);
         }
 
         public void increaseScore()

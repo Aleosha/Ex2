@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Ex2
 {
-    class MoveOption
+    public class MoveOption
     {
         private int m_Row;
         private int m_Column;

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Ex2
 {
-    class ComputerPlayerLogic
+    public class ComputerPlayerLogic
     {
         private const float k_DiagonalFactor = 0.5f;
 
@@ -12,7 +12,7 @@ namespace Ex2
         {
             MoveOption bestOption = null;            
             int dimensions = i_Game.BoardDimension;
-            MoveOption[] options = new MoveOption[dimensions*dimensions];
+            MoveOption[] options = new MoveOption[dimensions * dimensions];
             float bestOptionWeight = -1 * options.Length;
 
             int optionsCount = 0;
@@ -48,7 +48,7 @@ namespace Ex2
             int row = i_option.Row;
             int column = i_option.Column;
             int dimensions = i_Game.BoardDimension;
-            bool isOnDiagonal = (row == column) || (row+column==dimensions+1);
+            bool isOnDiagonal = (row == column) || (row + column == dimensions + 1);
 
             // Count horizontal 
             for (int i = 1; i <= dimensions; i++)
@@ -63,8 +63,7 @@ namespace Ex2
                         case eCellValue.PLAYER_2:
                             weight--;
                             break;            
-                    }
-                                
+                    }           
                 }
             }
 
@@ -81,8 +80,7 @@ namespace Ex2
                         case eCellValue.PLAYER_2:
                             weight--;
                             break;
-                    }
-                       
+                    }    
                 }
             }
 

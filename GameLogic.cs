@@ -6,7 +6,6 @@ namespace Ex2
 {
     public class GameLogic
     {
-
         private eCellValue[,] m_Board;
         private int m_Dimension;
         private Player m_Player1, m_Player2, m_CurrPlayer;
@@ -84,7 +83,7 @@ namespace Ex2
 
         private bool isGameAbandoned()
         {
-            return (m_GameTerminationStatus == eGameTerminationStatus.ABANDONED);
+            return m_GameTerminationStatus == eGameTerminationStatus.ABANDONED;
         }
 
         private bool isGameWon()
@@ -119,6 +118,7 @@ namespace Ex2
             {
                 m_GameTerminationStatus = eGameTerminationStatus.TIE;
             }
+
             return fullBoard;
         }
 
@@ -154,6 +154,7 @@ namespace Ex2
                     break;
                 }
             }
+
             return fullDiagonal;
         }
 
@@ -165,7 +166,6 @@ namespace Ex2
                 bool fullColumn = true;
                 for (int j = 0; j < m_Dimension - 1; j++)
                 {
-
                     eCellValue currentCell = m_Board[j, i];
                     eCellValue nextCell = m_Board[j + 1, i];
                     if (eCellValue.EMPTY.Equals(currentCell) || !nextCell.Equals(currentCell))
@@ -173,7 +173,6 @@ namespace Ex2
                         fullColumn = false;
                         break;
                     }
-
                 }
 
                 if (fullColumn)
@@ -182,6 +181,7 @@ namespace Ex2
                     break;
                 }
             }
+
             return isGameOver;
         }
 
@@ -193,7 +193,6 @@ namespace Ex2
                 bool fullRow = true;
                 for (int j = 0; j < m_Dimension - 1; j++)
                 {
-
                     eCellValue currentCell = m_Board[i, j];
                     eCellValue nextCell = m_Board[i, j + 1];
                     if (eCellValue.EMPTY.Equals(currentCell) || !nextCell.Equals(currentCell))
@@ -201,14 +200,15 @@ namespace Ex2
                         fullRow = false;
                         break;
                     }
-
                 }
+
                 if (fullRow)
                 {
                     isGameOver = true;
                     break;
                 }
             }
+
             return isGameOver;
         }
 

@@ -6,8 +6,6 @@ namespace Ex2
 {
     public class GameConsole
     {
-        private GameLogic m_GameLogic;
-
         private const int k_MaxBoardSize = 9;
         private const int k_MinBoardSize = 3;
         private const char k_RowSeparator = '=';
@@ -15,6 +13,8 @@ namespace Ex2
         private const char k_EmptyCellSign = ' ';
         private const int k_EndGameCode = -1;
         private const int k_PlayAgainCode = 1;
+
+        private GameLogic m_GameLogic;
 
         public GameConsole()
         {
@@ -47,8 +47,10 @@ namespace Ex2
                             makeComputerMove(ref wasCellEmpty);
                         }
                     }
+
                     m_GameLogic.AlternatePlayers();
                 }
+
                 Print();
                 printGameEndingStatus();
                 showScores();
@@ -132,6 +134,7 @@ namespace Ex2
                 m_GameLogic.GameTerminationStatus = eGameTerminationStatus.ABANDONED;
                 return;
             }
+
             int currColumn = getColumnFromUser();
             io_WasCellEmpty = m_GameLogic.SetCell(currRow, currColumn, m_GameLogic.CurrPlayer.CellValue);
             if (!io_WasCellEmpty)
@@ -155,10 +158,11 @@ namespace Ex2
                 System.Console.WriteLine("Please enter row (1-{0}):", m_GameLogic.BoardDimension);
                 string inputText = System.Console.ReadLine();
                 numberIsInt = int.TryParse(inputText, out row);
-                if (!numberIsInt && inputText.Equals((string)("q")))
+                if (!numberIsInt && inputText.Equals((string)"q"))
                 {
                     return k_EndGameCode;
                 }
+
                 if (!numberIsInt || row < 1 || row > m_GameLogic.BoardDimension)
                 {
                     System.Console.WriteLine("The input you entered is invalid.");
@@ -196,7 +200,6 @@ namespace Ex2
 
             return column;
         }
-
 
         private void initializeGame()
         {
@@ -270,10 +273,11 @@ namespace Ex2
         private string getSeparatorLine()
         {
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < m_GameLogic.BoardDimension * 2 + 2; i++)
+            for (int i = 0; i < (m_GameLogic.BoardDimension * 2) + 2; i++)
             {
                 sb.Append(k_RowSeparator);
             }
+
             return sb.ToString();
         }
 
@@ -298,12 +302,11 @@ namespace Ex2
                         break;
                 }
             }
+
             stringBuilder.Append(k_ColumnSeparator);
 
             return stringBuilder.ToString();
-
         }
-
 
         private string getHorizontalIndexes()
         {
@@ -313,7 +316,6 @@ namespace Ex2
             {
                 stringBuilder.Append(k_EmptyCellSign).Append(i);
             }
-
 
             return stringBuilder.ToString();
         }
