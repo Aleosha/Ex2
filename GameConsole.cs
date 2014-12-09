@@ -29,7 +29,7 @@ namespace Ex2
             {
                 while (!m_GameLogic.IsGameOver())
                 {
-                    Print();
+                    clearScreenAndPrintBoard();
                     showWhoseTurnItIs();
                     bool wasCellEmpty = false;
                     while (!wasCellEmpty)
@@ -51,7 +51,7 @@ namespace Ex2
                     m_GameLogic.AlternatePlayers();
                 }
 
-                Print();
+                clearScreenAndPrintBoard();
                 printGameEndingStatus();
                 showScores();
                 endGame = !proposeNewGame();
@@ -143,7 +143,7 @@ namespace Ex2
             }
         }
 
-        public void showWhoseTurnItIs()
+        private void showWhoseTurnItIs()
         {
             System.Console.WriteLine("It's {0}'s turn", m_GameLogic.CurrPlayer.ToString());
         }
@@ -258,7 +258,7 @@ namespace Ex2
             return boardSize;
         }
 
-        public void Print()
+        private void clearScreenAndPrintBoard()
         {
             Ex02.ConsoleUtils.Screen.Clear();
             write(getHorizontalIndexes());
