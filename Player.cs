@@ -14,10 +14,6 @@ namespace Ex2
 
         int m_Score = 0;
 
-        public Player(ePlayerType i_playerType, string i_Name)
-        {
-
-        }
 
         public Player(ePlayerType i_PlayerType, eCellValue i_CellValue)
         {

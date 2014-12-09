@@ -129,8 +129,8 @@ namespace Ex2
 
         private void makeComputerMove(ref bool io_WasCellEmpty)
         {
-            int[] bestOption = ComputerPlayerLogic.GetBestOption(m_GameLogic);
-            io_WasCellEmpty = m_GameLogic.SetCell(bestOption[0], bestOption[1], m_GameLogic.CurrPlayer.CellValue);
+            MoveOption bestOption = ComputerPlayerLogic.GetBestOption(m_GameLogic);
+            io_WasCellEmpty = m_GameLogic.SetCell(bestOption.Row, bestOption.Column, m_GameLogic.CurrPlayer.CellValue);
             if (!io_WasCellEmpty)
             {
                 System.Console.WriteLine("Computer made an illegal move");

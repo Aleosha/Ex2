@@ -10,12 +10,12 @@ namespace Ex2
         private const int COLUMN_INDEX = 1;
         private const float k_DiagonalFactor = 0.5f;
 
-        public static int[] GetBestOption(GameLogic i_Game)
+        public static MoveOption GetBestOption(GameLogic i_Game)
         {
-            int[] bestOption = new int[2];
-            float bestOptionWeight = -1;
+            MoveOption bestOption = null;            
             int dimensions = i_Game.BoardDimension;
-            int[][] options = new int[dimensions*dimensions][];
+            MoveOption[] options = new MoveOption[dimensions*dimensions];
+            float bestOptionWeight = -1 * options.Length;
 
             int optionsCount = 0;
             for (int i = 1; i <= dimensions; i++ )
@@ -24,7 +24,7 @@ namespace Ex2
                 {
                     if (eCellValue.EMPTY.Equals(i_Game.GetCell(i, j)))
                     {
-                        options[optionsCount] = new int[] { i, j};
+                        options[optionsCount] = new MoveOption(i, j);
                         optionsCount++;
                     }
                 }
@@ -43,12 +43,12 @@ namespace Ex2
             return bestOption;
         }
 
-        private static float weightOption(int[] p, GameLogic i_Game)
+        private static float weightOption(MoveOption i_option, GameLogic i_Game)
         {
             float weight = 0;
-            
-            int row = p[ROW_INDEX];
-            int column = p[COLUMN_INDEX];
+
+            int row = i_option.Row;
+            int column = i_option.Column;
             int dimensions = i_Game.BoardDimension;
             bool isOnDiagonal = (row == column) || (row+column==dimensions+1);
 
@@ -99,19 +99,9 @@ namespace Ex2
 
         internal static string printBestOption(GameLogic i_Game)
         {
-            int[] bestOption = GetBestOption(i_Game);
-            StringBuilder stringBuilder = new StringBuilder();
+            MoveOption bestOption = GetBestOption(i_Game);
 
-            for (int i = 0; i < bestOption.Length; i++)
-            {
-                if (i > 0)
-                {
-                    stringBuilder.Append(",");
-                }
-                stringBuilder.Append(bestOption[i]);
-            }
-
-            return stringBuilder.ToString();
+            return bestOption.ToString();
         }
     }
 }
